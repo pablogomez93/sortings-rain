@@ -3,28 +3,23 @@ package com.pabgomez93.sortingsRain.Sortings;
 import com.pabgomez93.sortingsRain.Sorting;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class RadixSort extends Sorting {
+	
+    private static ArrayList<ArrayList<Integer>> digits = new ArrayList<ArrayList<Integer>>(){
+    	private static final long serialVersionUID = 1L;
+    	{for (int i = 1; i <= 10; i++) add(new ArrayList<Integer>());}
+    };
+    
+    public static final void sort(Integer[] arr) {
+    	radixSort(arr, false);
+    }
+    
+    public static final void reverse_sort(Integer[] arr) {
+    	radixSort(arr, true);
+    }
 
-    private static ArrayList<ArrayList<Integer>> digits = new ArrayList<ArrayList<Integer>>(){{
-        for (int i = 1; i < 10; i++) add(new ArrayList<Integer>());
-    }};
-
-	private static final int getMaxDigitLength(int[] arr) {
-		int max = 0;
-
-		for (int i = 0; i < arr.length; i++) {
-			String num = String.valueOf(arr[i]);
-
-			if(num.length() > max)
-				max = num.length();
-		}
-
-		return max;
-	}
-
-	public static final void sort(int[] arr) {
+	public static final void radixSort(Integer[] arr, boolean reversed) {
 		int n = arr.length;
 		int maxDigitLength = getMaxDigitLength(arr);
 
@@ -34,7 +29,8 @@ public class RadixSort extends Sorting {
 				int number = arr[i];
 				int digit = getDigit(d, number);
 
-				digits.get(digit).add(number);
+				if(reversed)	digits.get(digits.size()-1 - digit).add(number);
+				else			digits.get(digit).add(number);
 			}
 
 			int arrayIndex = 0;
@@ -46,6 +42,19 @@ public class RadixSort extends Sorting {
 			}
 
 		}
+	}
+	
+	private static final int getMaxDigitLength(Integer[] arr) {
+		int max = 0;
+
+		for (int i = 0; i < arr.length; i++) {
+			String num = String.valueOf(arr[i]);
+
+			if(num.length() > max)
+				max = num.length();
+		}
+
+		return max;
 	}
 
 	private static int getDigit(int digitIndex, int number) {
